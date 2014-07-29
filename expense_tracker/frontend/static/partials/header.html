@@ -1,0 +1,23 @@
+<div class="page-header">
+    <div class="row">
+        <div class="col-md-5">
+            <h1>
+                Expense Manager<br>
+                <small>Track your expenses</small>
+            </h1>
+         </div>
+
+        <div ng-controller="UserDisplayController as display">
+            <nav ng-show="display.username">
+                <div class="col-md-2 col-md-offset-4">
+                    <p>Logged in as: {{ display.username }}</p>
+                </div>
+                <div class="col-md-1">
+                    <span class="pull-right">
+                        <a class="btn btn-warning btn-sm" ng-click="display.logout()">Logout</a>
+                    </span>
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>

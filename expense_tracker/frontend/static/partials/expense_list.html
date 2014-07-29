@@ -1,0 +1,83 @@
+<div ng-controller="ExpenseListController">
+    <p>{{ message }}</p>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Description</th>
+                <th>Amount</th>
+                <th colspan="2">Comment</th>
+            </tr>
+        </thead>
+        <tr ng-repeat="expense in expenses">
+            <td>{{ expense.date | date:'dd/MM/yyyy' }}</td>
+            <td>{{ expense.date | date:'h:mm:ssa' }}</td>
+            <td>{{ expense.description }}</td>
+            <td>{{ expense.amount }}</td>
+            <td>{{ expense.comment }}</td>
+            <td width="150">
+                <a href="#/expense/{{ expense.id }}/" class="btn btn-primary btn-sml text-right">Edit</a>
+                <a ng-click="deleteExpense(expense.id)" class="btn btn-danger btn-sml text-right">Delete</a>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3"><strong>Total Items:</strong> {{ totals.count }}</td>
+            <td colspan="3"><strong>Total Amount:</strong> {{ totals.amount }}</td>
+        </tr>
+    </table>
+    <a class="btn btn-primary" href="#/expense/new/">Create a new expense</a>
+    <button class="btn" ng-click="getExpenses()">Show all</button>
+    <hr />
+
+    <h3>Filter expenses by date:</h3>
+    <div class="well" ng-controller="DatepickerExpenseListController">
+        <div class="row">
+            <div class="col-md-1">
+                <label class="control-label" for="from_picker">From</label>
+            </div>
+            <div class="col-md-2">
+                <p class="input-group">
+                  <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt.from" is-open="fromOpened"
+                         max-date="'2015-06-22'" datepicker-options="dateOptions" ng-required="true" close-text="Close" id="from_picker"/>
+                  <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="open($event, 'from')"><i class="glyphicon glyphicon-calendar"></i></button>
+                  </span>
+                </p>
+            </div>
+            <div class="col-md-4">
+                <pre>Date: <em>{{dt.from | date:'fullDate' }}</em></pre>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-1">
+                <label class="control-label" for="to_picker">To</label>
+            </div>
+            <div class="col-md-2">
+                <p class="input-group">
+                  <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt.to" is-open="toOpened"
+                         max-date="'2015-06-22'" datepicker-options="dateOptions" ng-required="true" close-text="Close" id="to_picker"/>
+                  <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="open($event, 'to')"><i class="glyphicon glyphicon-calendar"></i></button>
+                  </span>
+                </p>
+            </div>
+            <div class="col-md-4">
+                <pre>Date: <em>{{dt.to | date:'fullDate' }}</em></pre>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-1">
+                <label for="format_dropdown">Format:</label>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control" ng-model="format" ng-options="f for f in formats" id="format_dropdown"><option></option></select>
+            </div>
+            <div class="col-md-1">
+                <button class="btn" ng-click="getFilteredExpenses()">Filter</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,57 @@
+<form role="form" ng-controller="ExpenseFormController" ng-submit="saveExpense()">
+    <div class="row">
+        <div class="col-md-4">
+            <p class="bg-danger">{{ message }}</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" class="form-control" id="description" ng-model="expense.description" placeholder="Description">
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="control-label" for="dt_picker">Date</label>
+                <p class="input-group">
+                  <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="expense.date" is-open="dtOpened"
+                         max-date="'2015-06-22'" datepicker-options="dateOptions" ng-required="true" close-text="Close" id="dt_picker"/>
+                  <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                  </span>
+                </p>
+                <!--
+                <div class="col-md-4">
+                    <pre>Date: <em>{{expense.date | date:'fullDate' }}</em></pre>
+                </div>
+                -->
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="amount">Amount</label>
+                <input type="text" class="form-control" id="amount" ng-model="expense.amount" placeholder="What is the value of this expense?">
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="comment">Comment</label>
+                <input type="text" class="form-control" id="comment" ng-model="expense.comment" placeholder="Comment">
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a class="btn btn-default" href="#/">Cancel</a>
+</form>

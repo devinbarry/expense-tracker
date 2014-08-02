@@ -1,6 +1,6 @@
 <form role="form" ng-controller="UserController as auth" ng-submit="auth.authenticate()">
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-6">
             <p class="bg-danger">{{ auth.message }}</p>
         </div>
     </div>
@@ -23,6 +23,5 @@
     <div class="form-group">
         <input type="submit" class="btn btn-primary" value="Login" />
         <a class="btn btn-default" href="#/register/">Register</a>
-    </div>
     </div>
 </form>

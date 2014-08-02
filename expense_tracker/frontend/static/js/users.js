@@ -23,21 +23,31 @@
     // Service used to authenticate users against the server
     app.service('AuthenticationService', ['$location', '$http', '$q', 'UserService', 'UserRestService',
         function ($location, $http, $q, UserService, UserRestService) {
+            // These error codes should have a 'reason' attached to the data
+            var reason_error_codes = [400, 401, 403];
 
-            var handleAuthError = function(response) {
-                if (response.status == 401) {
-                    if (!angular.isObject(response.data) || !response.data.message) {
-                        return $q.reject("Sorry, we're unable to authenticate you");
+            // Generic error handler - returns a customised error handler
+            var handleError = function(defaultMessage) {
+                return function(response) {
+                    if (reason_error_codes.indexOf(response.status) > -1) {
+                        if (angular.isObject(response.data) && response.data.reason) {
+                            return $q.reject(response.data.reason);
+
+                        } else {
+                            return $q.reject(defaultMessage);
+                        }
                     } else {
-                        return $q.reject(response.data.message);
+                        if (angular.isObject(response.data) && response.data.error_message) {
+                            return $q.reject(response.data.error_message);
+                        } else {
+                            return $q.reject("An unknown error occurred");
+                        }
                     }
-                }
-                return $q.reject("An unknown error occurred");
+                };
             };
-
-            var handleRegError = function(response) {
-                return $q.reject("An error occurred while registering");
-            };
+            // Customised error handlers
+            var handleAuthError = handleError("Sorry, we're unable to authenticate you");
+            var handleRegError = handleError("An error occurred while registering");
 
             var handleSuccess = function(response) {
                 // Valid response returned means authentication was successful

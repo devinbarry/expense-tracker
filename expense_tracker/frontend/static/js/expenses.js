@@ -171,6 +171,8 @@
                 ExpenseService.getExpense($routeParams.id)
                     .success(function(expense) {
                         $scope.expense = expense;
+                        // Convert the string to a float so that the form can display it.
+                        $scope.expense.amount = parseFloat(expense.amount);
                     });
             } else {
                 $scope.today();

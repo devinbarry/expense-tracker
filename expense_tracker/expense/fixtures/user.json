@@ -1,0 +1,74 @@
+[
+{
+    "pk": 1, 
+    "model": "auth.user", 
+    "fields": {
+        "username": "devinb", 
+        "first_name": "", 
+        "last_name": "", 
+        "is_active": true, 
+        "is_superuser": true, 
+        "is_staff": true, 
+        "last_login": "2014-08-06T12:14:31.952Z", 
+        "groups": [], 
+        "user_permissions": [], 
+        "password": "pbkdf2_sha256$12000$BxyRxGYOZpXp$bbkPLGTLuuPX5YhUIDcMVoBqDQ+R7S593BrR7oJIa3c=", 
+        "email": "devinb@example.com", 
+        "date_joined": "2014-08-06T12:07:00.012Z"
+    }
+},
+{
+    "pk": 2, 
+    "model": "auth.user", 
+    "fields": {
+        "username": "carlr", 
+        "first_name": "", 
+        "last_name": "", 
+        "is_active": true, 
+        "is_superuser": false, 
+        "is_staff": false, 
+        "last_login": "2014-07-30T12:07:44.828Z", 
+        "groups": [], 
+        "user_permissions": [], 
+        "password": "pbkdf2_sha256$12000$BoBw7LazpEs0$8JvX8MaqNbu/8S8PZyChhQb3QvFWCVzyHkjfo9fmkC4=", 
+        "email": "carlr@example.com", 
+        "date_joined": "2014-07-30T11:37:19.522Z"
+    }
+},
+{
+    "pk": 3, 
+    "model": "auth.user", 
+    "fields": {
+        "username": "jamesw", 
+        "first_name": "", 
+        "last_name": "", 
+        "is_active": true, 
+        "is_superuser": false, 
+        "is_staff": false, 
+        "last_login": "2014-07-30T12:02:22.965Z", 
+        "groups": [], 
+        "user_permissions": [], 
+        "password": "pbkdf2_sha256$12000$tUw7FJRms8xa$+8KQATiC2ob3c3LB816I90ZpplkCp3FqUxjP4CnZjZo=", 
+        "email": "", 
+        "date_joined": "2014-07-30T12:02:22.965Z"
+    }
+},
+{
+    "pk": 4, 
+    "model": "auth.user", 
+    "fields": {
+        "username": "testuser", 
+        "first_name": "test", 
+        "last_name": "user", 
+        "is_active": true, 
+        "is_superuser": false, 
+        "is_staff": false, 
+        "last_login": "2014-07-30T12:06:59.360Z", 
+        "groups": [], 
+        "user_permissions": [], 
+        "password": "pbkdf2_sha256$12000$g5ZfwIpF5vcu$9hiVXlNB5fQgf3u1qddjXm5PnwYFDIYBmY+eOx40c00=", 
+        "email": "test@user.com", 
+        "date_joined": "2014-07-30T12:06:59.360Z"
+    }
+}
+]

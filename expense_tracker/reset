@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# This script is used to quickly setup the database for testing.
+# Once you have created your virtualenv and installed all requirements,
+# you may run this script to get started
+
+if [ -z "$VIRTUAL_ENV" ]; then
+    echo "Need to activate VIRTUALENV"
+    exit 1
+fi
+
+# Delete the database
+rm db.sqlite3
+
+# Make a new database and setup the superuser
+python manage.py syncdb --noinput
+python manage.py createsuperuser --email="devinb@example.com" --username="devinb"
+
+# load the default fixtures
+python manage.py loaddata user.json
+python manage.py loaddata expenses.json
+python manage.py loaddata apikeys.json

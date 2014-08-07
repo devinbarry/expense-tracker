@@ -1,5 +1,6 @@
 # coding=utf-8
 from __future__ import absolute_import, unicode_literals, print_function, division
+from decimal import Decimal
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.conf.urls import url
@@ -41,6 +42,12 @@ class UserResource(BaseModelResource):
         ]
 
     def authenticate(self, request, **kwargs):
+        """
+        Fetch the user API after the user has supplied username and password.
+        :param request: Django request object
+        :param kwargs:
+        :return:
+        """
         self.method_check(request, allowed=['post'])
         data = self.deserialize(request, request.body, format=request.META.get('CONTENT_TYPE', 'application/json'))
         username = data.get('username', '')
@@ -109,19 +116,35 @@ class ExpenseResource(BaseModelResource):
     """ Expose the Expense objects over REST, and provide a level of authorisation """
 
     def obj_create(self, bundle, **kwargs):
-        """ Any "create" methods must use the session user always """
+        """
+        Any "create" methods must use the session user always.
+        """
         return super(ExpenseResource, self).obj_create(bundle, user=bundle.request.user)
 
     def authorized_read_list(self, object_list, bundle):
-        """ All "list" methods must filter by this user only """
+        """
+        All "list" methods must filter by this user only.
+        """
         return object_list.filter(user=bundle.request.user)
 
     def alter_list_data_to_serialize(self, request, data):
-        """ Add total amount to meta response """
-        total_amount = 0
+        """
+        Add total amount and average to meta response.
+        """
+        total_amount = Decimal('0')
+        average = Decimal('0')
+
+        # Sum the amount for all objects to get the total_amount
         for obj in data['objects']:
             total_amount += obj.obj.amount
+
+        # Divide the total by the number of items to get average
+        count = len(data['objects'])
+        if count:
+            average = total_amount / count
+
         data['meta']['total_amount'] = total_amount
+        data['meta']['average'] = average
         return data
 
     class Meta:

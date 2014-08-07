@@ -29,6 +29,7 @@
         };
     }]);
 
+    // Service used to set the to and from filtering dates
     app.service('FilterService', ['$log', function($log) {
         var dates = {from: new Date(), to: new Date()};
         this.getFromDate = function () {
@@ -60,27 +61,31 @@
             $scope.expenses = [];
             $scope.totals = {};
 
+            // Handle successful API call.
+            var handleSuccess = function(expenses) {
+                $scope.expenses = expenses.objects;
+                $scope.totals = {
+                    amount: expenses.meta.total_amount,
+                    average: expenses.meta.average,
+                    count: expenses.meta.total_count
+                };
+            };
+            // Handle error condition after API call.
+            var handleError = function() {
+                $scope.message = "Unable to fetch expenses";
+            };
+
             // Get expenses, supplying the dates as a filter
             $scope.getFilteredExpenses = function() {
                 ExpenseService.getExpenses(FilterService.getDates())
-                    .success(function(expenses) {
-                        $scope.expenses = expenses.objects;
-                        $scope.totals = {amount: expenses.meta.total_amount, count: expenses.meta.total_count};
-                    })
-                    .error(function() {
-                        $scope.message = "Unable to fetch expenses";
-                    });
+                    .success(handleSuccess)
+                    .error(handleError);
             };
             // Get all expenses, unfiltered
             $scope.getExpenses = function() {
                 ExpenseService.getExpenses()
-                    .success(function(expenses) {
-                        $scope.expenses = expenses.objects;
-                        $scope.totals = {amount: expenses.meta.total_amount, count: expenses.meta.total_count};
-                    })
-                    .error(function() {
-                        $scope.message = "Unable to fetch expenses";
-                    });
+                    .success(handleSuccess)
+                    .error(handleError);
             };
             // Delete the selected expense
             $scope.deleteExpense = function(id) {

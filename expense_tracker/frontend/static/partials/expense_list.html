@@ -22,8 +22,9 @@
             </td>
         </tr>
         <tr>
-            <td colspan="3"><strong>Total Items:</strong> {{ totals.count }}</td>
-            <td colspan="3"><strong>Total Amount:</strong> {{ totals.amount }}</td>
+            <td colspan="2"><strong>Total Items:</strong> {{ totals.count }}</td>
+            <td colspan="2"><strong>Total Amount:</strong> {{ totals.amount | number:2 }}</td>
+            <td colspan="2"><strong>Average:</strong> {{ totals.average | number:2 }}</td>
         </tr>
     </table>
     <a class="btn btn-primary" href="#/expense/new/">Create a new expense</a>

@@ -14,7 +14,7 @@
             <td>{{ expense.date | date:'dd/MM/yyyy' }}</td>
             <td>{{ expense.date | date:'h:mm:ssa' }}</td>
             <td>{{ expense.description }}</td>
-            <td>{{ expense.amount }}</td>
+            <td>{{ expense.amount | number:2 }}</td>
             <td>{{ expense.comment }}</td>
             <td width="150">
                 <a href="#/expense/{{ expense.id }}/" class="btn btn-primary btn-sml text-right">Edit</a>
@@ -81,4 +81,6 @@
             </div>
         </div>
     </div>
+    <a class="btn btn-primary" href="#/weeklytotals/">Show weekly totals</a>
+    <hr />
 </div>

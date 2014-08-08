@@ -1,7 +1,8 @@
 "use strict";
 
 (function() {
-    var app = angular.module("expenseManager", ["ngRoute", "expenseManager.users", "expenseManager.expenses"]);
+    var app = angular.module("expenseManager", [
+        "ngRoute", "expenseManager.users", "expenseManager.expenses", "expenseManager.weeklyTotal"]);
 
     app.config(function($httpProvider) {
         // Always send the standard header
@@ -32,6 +33,10 @@
             .when("/expense/:id/delete/", {
                 controller: "ExpenseFormController",
                 templateUrl:"/static/partials/expense_form.html"
+            })
+            .when("/weeklytotals/", {
+                controller: "WeeklyTotalController",
+                templateUrl:"/static/partials/weekly_totals.html"
             })
             .otherwise({redirectTo: "/"})
     });

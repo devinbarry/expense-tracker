@@ -24,7 +24,8 @@ class ExpenseResourceTest(ResourceTestCase):
         self.expense3 = Expense.objects.get(pk=3)
 
         # We also build a detail URI, since we will be using it all over. DRY, baby. DRY.
-        self.detail_url = '/api/v1/expense/{0}/'.format(self.expense3.pk)
+        self.base_url = '/api/v1/expense/'
+        self.detail_url = self.base_url + '{0}/'.format(self.expense3.pk)
 
         # The data we'll send on POST requests. Again, because we'll use it frequently (enough).
         self.post_data = {
@@ -41,28 +42,32 @@ class ExpenseResourceTest(ResourceTestCase):
         return self.create_apikey(username=self.username, api_key=self.user.api_key.key)
 
     def test_get_schema(self):
-        resp = self.api_client.get('/api/v1/expense/schema/', format='json', authentication=self.get_credentials())
+        resp = self.api_client.get(self.base_url + 'schema/', format='json', authentication=self.get_credentials())
         self.assertValidJSONResponse(resp)
 
     def test_get_list_unauthorized(self):
-        self.assertHttpUnauthorized(self.api_client.get('/api/v1/expense/', format='json'))
+        self.assertHttpUnauthorized(self.api_client.get(self.base_url, format='json'))
 
     def test_get_list_json(self):
-        resp = self.api_client.get('/api/v1/expense/', format='json', authentication=self.get_credentials())
+        resp = self.api_client.get(self.base_url, format='json', authentication=self.get_credentials())
         self.assertValidJSONResponse(resp)
         # Fetch the objects data from the response
         objects = self.deserialize(resp)['objects']
 
-        # Scope out the data for correctness.
-        self.assertEqual(len(objects), 8)
+        # The list should display all objects in the db
+        self.assertEqual(len(objects), Expense.objects.all().count())
+        # Format the time correctly
+        auckland = timezone('Pacific/Auckland')
+        local = self.expense1.date.astimezone(auckland).isoformat()
+        without_tz = str(local)[:-6]  # Chop the time zone info from the back of the string
 
         # Here, we're checking an entire structure for the expected data.
         self.assertEqual(objects[0], {
             'id': self.expense1.pk,
-            'description': 'Airplane',
-            'comment': 'Fly so high!',
-            'amount': '747',
-            'date': '2014-06-30T00:00:00',
+            'description': self.expense1.description,
+            'comment': self.expense1.comment,
+            'amount': str(self.expense1.amount),
+            'date': without_tz,
             'resource_uri': '/api/v1/expense/{0}/'.format(self.expense1.pk)
         })
 
@@ -75,24 +80,26 @@ class ExpenseResourceTest(ResourceTestCase):
 
         # We use ``assertKeys`` here to just verify the keys, not all the data.
         self.assertKeys(self.deserialize(resp), ['amount', 'comment', 'date', 'description', 'id', 'resource_uri'])
-        self.assertEqual(self.deserialize(resp)['description'], 'Maths')
+        # Check that was we got from the API matches what is in the database
+        self.assertEqual(self.deserialize(resp)['description'], self.expense3.description)
 
     def test_post_list_unauthenticated(self):
-        self.assertHttpUnauthorized(self.api_client.post('/api/v1/expense/', format='json', data=self.post_data))
+        self.assertHttpUnauthorized(self.api_client.post(self.base_url, format='json', data=self.post_data))
 
     def test_post_list(self):
         # Check how many are there first.
-        self.assertEqual(Expense.objects.count(), 8)
-        self.assertHttpCreated(self.api_client.post('/api/v1/expense/', format='json', data=self.post_data,
+        object_count = Expense.objects.count()
+        self.assertHttpCreated(self.api_client.post(self.base_url, format='json', data=self.post_data,
                                                     authentication=self.get_credentials()))
         # Verify a new one has been added.
-        self.assertEqual(Expense.objects.count(), 9)
+        self.assertEqual(Expense.objects.count(), object_count + 1)
 
     def test_put_detail_unauthenticated(self):
         self.assertHttpUnauthorized(self.api_client.put(self.detail_url, format='json', data={}))
 
     def test_put_detail(self):
         id = self.expense3.pk  # This is the expense we are modifying
+        original_comment = self.expense3.comment
 
         # Grab the current data & modify it slightly.
         original_data = self.deserialize(self.api_client.get(self.detail_url, format='json',
@@ -101,14 +108,15 @@ class ExpenseResourceTest(ResourceTestCase):
         new_data['description'] = 'Updated: First Post'
         new_data['date'] = '2012-05-01T20:06:12+12:00'
 
-        self.assertEqual(Expense.objects.count(), 8)
+        object_count = Expense.objects.count()
         self.assertHttpAccepted(self.api_client.put(self.detail_url, format='json', data=new_data,
                                                     authentication=self.get_credentials()))
         # Make sure the count hasn't changed when we did the update.
-        self.assertEqual(Expense.objects.count(), 8)
+        self.assertEqual(Expense.objects.count(), object_count)
         # Check for updated data.
         self.assertEqual(Expense.objects.get(pk=id).description, 'Updated: First Post')
-        self.assertEqual(Expense.objects.get(pk=id).comment, 'I can has sums')
+        # We didn't update the comment. It shouldn't have changed
+        self.assertEqual(Expense.objects.get(pk=id).comment, original_comment)
 
         auckland = timezone('Pacific/Auckland')
         auckland_time = auckland.localize(datetime.datetime(2012, 5, 1, 20, 6, 12))
@@ -118,7 +126,8 @@ class ExpenseResourceTest(ResourceTestCase):
         self.assertHttpUnauthorized(self.api_client.delete(self.detail_url, format='json'))
 
     def test_delete_detail(self):
-        self.assertEqual(Expense.objects.count(), 8)
+        object_count = Expense.objects.count()
         self.assertHttpAccepted(self.api_client.delete(self.detail_url, format='json',
                                                        authentication=self.get_credentials()))
-        self.assertEqual(Expense.objects.count(), 7)
+        # Ensure that we have one less expense object than we started with
+        self.assertEqual(Expense.objects.count(), object_count - 1)

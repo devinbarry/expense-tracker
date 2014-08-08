@@ -4,11 +4,12 @@ from tastypie.api import Api
 from django.conf.urls import patterns, include, url
 from django.conf import settings
 from django.contrib import admin
-from expense.resources import ExpenseResource, UserResource
+from expense.resources import ExpenseResource, UserResource, WeeklyTotalResource
 
 v1_api = Api(api_name='v1')
 v1_api.register(UserResource())
 v1_api.register(ExpenseResource())
+v1_api.register(WeeklyTotalResource())
 
 admin.autodiscover()
 

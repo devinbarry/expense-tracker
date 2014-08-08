@@ -4,7 +4,7 @@
         "model": "expense.expense",
         "fields": {
             "user": 1,
-            "date": "2014-06-30T00:00:00+12:00",
+            "date": "2014-06-30T13:13:00+12:00",
             "description": "Airplane",
             "amount": "747",
             "comment": "Fly so high!"
@@ -15,10 +15,10 @@
         "model": "expense.expense",
         "fields": {
             "user": 1,
-            "date": "2014-01-13T00:00:00+12:00",
-            "description": "Birthday expense",
-            "amount": "6969",
-            "comment": "Happy Birthday to me"
+            "date": "2014-06-13T14:14:00+12:00",
+            "description": "Boat",
+            "amount": "25",
+            "comment": "Im on a boat"
         }
     },
     {
@@ -26,10 +26,10 @@
         "model": "expense.expense",
         "fields": {
             "user": 1,
-            "date": "2014-07-1T00:00:00+12:00",
-            "description": "Maths",
-            "amount": "-345.567",
-            "comment": "I can has sums"
+            "date": "2014-07-1T15:15:00+12:00",
+            "description": "Car",
+            "amount": "300000.00",
+            "comment": "Ferrari"
         }
     },
     {
@@ -37,10 +37,10 @@
         "model": "expense.expense",
         "fields": {
             "user": 1,
-            "date": "2013-11-25T00:00:00+12:00",
-            "description": "expense 1",
-            "amount": "123",
-            "comment": "Generic expense"
+            "date": "2013-11-25T16:16:00+12:00",
+            "description": "House",
+            "amount": "25000",
+            "comment": "Apartment"
         }
     },
     {
@@ -48,10 +48,10 @@
         "model": "expense.expense",
         "fields": {
             "user": 1,
-            "date": "2014-12-28T00:00:00+12:00",
-            "description": "Small expense",
-            "amount": "0.0023",
-            "comment": "SO SMALL"
+            "date": "2014-12-28T07:07:00+12:00",
+            "description": "Food",
+            "amount": "45.20",
+            "comment": "Dinner"
         }
     },
     {
@@ -59,10 +59,10 @@
         "model": "expense.expense",
         "fields": {
             "user": 1,
-            "date": "2014-07-08T00:00:00+12:00",
-            "description": "Devin's Expense",
+            "date": "2014-07-08T08:08:00+12:00",
+            "description": "Jewelry",
             "amount": "89.23",
-            "comment": "OMG HAI 2 U"
+            "comment": "Diamonds"
         }
     },
     {
@@ -70,10 +70,10 @@
         "model": "expense.expense",
         "fields": {
             "user": 1,
-            "date": "2014-07-23T00:00:00+12:00",
+            "date": "2014-07-23T09:09:00+12:00",
             "description": "Car expense",
             "amount": "1000.1",
-            "comment": "#@&(*^*#&!"
+            "comment": "Fan belt"
         }
     },
     {
@@ -81,10 +81,109 @@
         "model": "expense.expense",
         "fields": {
             "user": 1,
-            "date": "2013-05-12T00:00:00+12:00",
+            "date": "2014-06-30T10:10:00+12:00",
             "description": "expense 2",
             "amount": "26.56",
             "comment": "More boring expenses"
+        }
+    },
+    {
+       "pk": 9,
+        "model": "expense.expense",
+        "fields": {
+            "user": 1,
+            "date": "2014-01-13T11:11:00+12:00",
+            "description": "Birthday expense",
+            "amount": "777",
+            "comment": "Happy Birthday to me"
+        }
+    },
+    {
+        "pk": 10,
+        "model": "expense.expense",
+        "fields": {
+            "user": 1,
+            "date": "2014-07-1T12:12:00+12:00",
+            "description": "Maths",
+            "amount": "-345.567",
+            "comment": "I can has sums"
+        }
+    },
+    {
+        "pk": 11,
+        "model": "expense.expense",
+        "fields": {
+            "user": 1,
+            "date": "2013-11-25T13:13:00+12:00",
+            "description": "expense 1",
+            "amount": "123",
+            "comment": "Generic expense"
+        }
+    },
+    {
+        "pk": 12,
+        "model": "expense.expense",
+        "fields": {
+            "user": 1,
+            "date": "2014-12-28T18:18:00+12:00",
+            "description": "Small expense",
+            "amount": "0.0023",
+            "comment": "SO SMALL"
+        }
+    },
+    {
+        "pk": 13,
+        "model": "expense.expense",
+        "fields": {
+            "user": 1,
+            "date": "2014-07-08T20:20:00+12:00",
+            "description": "Devin's Expense",
+            "amount": "89.23",
+            "comment": "Rent"
+        }
+    },
+    {
+        "pk": 14,
+        "model": "expense.expense",
+        "fields": {
+            "user": 1,
+            "date": "2014-07-23T22:22:00+12:00",
+            "description": "Car expense",
+            "amount": "250.99",
+            "comment": "Engine"
+        }
+    },
+    {
+        "pk": 15,
+        "model": "expense.expense",
+        "fields": {
+            "user": 1,
+            "date": "2013-05-12T03:03:00+12:00",
+            "description": "expense 2",
+            "amount": "26.56",
+            "comment": "More boring expenses"
+        }
+    },
+    {
+        "pk": 16,
+        "model": "expense.expense",
+        "fields": {
+            "user": 1,
+            "date": "2014-01-13T04:04:00+12:00",
+            "description": "Birthday Round 2",
+            "amount": "5234.99",
+            "comment": "Drinks"
+        }
+    },
+    {
+        "pk": 17,
+        "model": "expense.expense",
+        "fields": {
+            "user": 1,
+            "date": "2014-01-13T03:50:00+13:00",
+            "description": "Loch Ness Monster",
+            "amount": "3.50",
+            "comment": "Tree Fiddy"
         }
     }
 ]

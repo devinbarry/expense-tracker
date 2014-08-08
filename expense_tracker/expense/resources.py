@@ -1,15 +1,16 @@
 # coding=utf-8
 from __future__ import absolute_import, unicode_literals, print_function, division
 from decimal import Decimal
+from collections import defaultdict, OrderedDict
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.conf.urls import url
-from tastypie import http
-from tastypie.resources import ModelResource
+from tastypie import http, fields
+from tastypie.resources import ModelResource, Resource
 from tastypie.authentication import ApiKeyAuthentication
 from tastypie.authorization import Authorization
 from tastypie.utils import trailing_slash
-from expense.models import Expense
+from expense.models import Expense, WeeklyTotal
 
 
 class BaseModelResource(ModelResource):
@@ -155,3 +156,83 @@ class ExpenseResource(BaseModelResource):
         authorization = Authorization()
         authentication = ApiKeyAuthentication()
         filtering = {'date': ['range']}
+
+
+class WeeklyTotalResource(Resource):
+    """ Expose the WeeklyTotal objects over REST, and provide a level of authorisation """
+    year = fields.DateField(attribute='year')
+    week_number = fields.IntegerField(attribute='week_number')
+    start_date = fields.DateField(attribute='start_date')
+    count = fields.IntegerField(attribute='count', help_text="The number of expenses this week")
+    total = fields.DecimalField(attribute='total', help_text="The total amount for all expenses this week")
+    average = fields.DecimalField(attribute='average', help_text="The average amount for expenses this week")
+
+    def get_object_list(self, request):
+        """
+        A hook to allow returning the list of available objects.
+        :param request:
+        :return:
+        """
+        # Construct the weekly total data using all expenses belonging to the logged in user
+        expenses = Expense.objects.filter(user=request.user)
+        return _build_weekly_totals(expenses)
+
+    def obj_get_list(self, bundle, **kwargs):
+        """
+        Fetches the list of objects available on the resource.
+        :param bundle:
+        :param kwargs:
+        :return:
+        """
+        # Filtering disabled for brevity...
+        return self.get_object_list(bundle.request)
+
+    def obj_get(self, bundle, **kwargs):
+        """
+        Fetches an individual object on the resource.
+        :param bundle:
+        :param kwargs:
+        :return:
+        """
+        # Just return the first item in the list always
+        return self.get_object_list(bundle, **kwargs)[:1]
+
+    class Meta:
+        list_allowed_methods = ['get', ]
+        detail_allowed_methods = ['get', ]
+        resource_name = 'weeklytotal'
+        authorization = Authorization()
+        authentication = ApiKeyAuthentication()
+
+
+def _build_weekly_totals(expenses):
+    """
+    Build a list of WeeklyTotal using an unordered list of expense objects.
+    :param expenses: A list or queryset of expense objects
+    :return: a sorted list of WeeklyTotal, sorted by week
+    """
+    weekly_totals = []
+
+    weeks = _organise_expenses_into_weeks(expenses)
+    for week_number in weeks.keys():
+        # Construct a new WeeklyTotal object and add it to the list
+        weekly_totals.append(WeeklyTotal(week_number[0], week_number[1], weeks[week_number]))
+
+    return weekly_totals
+
+
+def _organise_expenses_into_weeks(expenses):
+    """
+    Using the total list of user expenses, construct a dictionary whose keys
+    are the weeks of the year and whose values are a list containing all the
+    expenses for that week.
+    :param expenses: A list or queryset of expense objects
+    :return: A sorted OrderedDict of expenses.
+    """
+    weeks = defaultdict(list)
+    for expense in expenses:
+        # Determine which year and week the expense belongs to.
+        expense_year_week = expense.date.date().isocalendar()[:2]
+        weeks[expense_year_week].append(expense)
+    # Order the expenses chronologically
+    return OrderedDict(sorted(weeks.items(), key=lambda t: t[0]))

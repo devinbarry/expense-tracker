@@ -8,7 +8,7 @@ from expense.models import Expense
 
 
 class ExpenseResourceTest(ResourceTestCase):
-    # Use ``fixtures`` & ``urls`` as normal. See Django's ``TestCase`` documentation for the gory details.
+    # We need user and expenses fixtures during this test
     fixtures = ['user.json', 'expenses.json']
 
     def setUp(self):
@@ -18,8 +18,7 @@ class ExpenseResourceTest(ResourceTestCase):
         self.username = 'devinb'
         self.user = User.objects.get(username=self.username)
 
-        # Fetch the ``Expense`` object we'll use in testing.
-        # Note that we aren't using PKs because they can change depending on what other tests are running.
+        # These expenses are used during our testing
         self.expense1 = Expense.objects.get(pk=1)
         self.expense3 = Expense.objects.get(pk=3)
 

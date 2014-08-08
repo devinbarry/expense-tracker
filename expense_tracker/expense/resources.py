@@ -187,19 +187,9 @@ class WeeklyTotalResource(Resource):
         # Filtering disabled for brevity...
         return self.get_object_list(bundle.request)
 
-    def obj_get(self, bundle, **kwargs):
-        """
-        Fetches an individual object on the resource.
-        :param bundle:
-        :param kwargs:
-        :return:
-        """
-        # Just return the first item in the list always
-        return self.get_object_list(bundle, **kwargs)[:1]
-
     class Meta:
         list_allowed_methods = ['get', ]
-        detail_allowed_methods = ['get', ]
+        detail_allowed_methods = []
         resource_name = 'weeklytotal'
         authorization = Authorization()
         authentication = ApiKeyAuthentication()
